@@ -60,7 +60,7 @@ export const $HTTPValidationError = {
   },
 } as const
 
-export const $ItemCreate = {
+export const $PollCreate = {
   properties: {
     title: {
       type: "string",
@@ -80,7 +80,7 @@ export const $ItemCreate = {
   },
 } as const
 
-export const $ItemPublic = {
+export const $PollPublic = {
   properties: {
     title: {
       type: "string",
@@ -108,7 +108,7 @@ export const $ItemPublic = {
   },
 } as const
 
-export const $ItemUpdate = {
+export const $PollUpdate = {
   properties: {
     title: {
       type: "any-of",
@@ -135,12 +135,12 @@ export const $ItemUpdate = {
   },
 } as const
 
-export const $ItemsPublic = {
+export const $PollsPublic = {
   properties: {
     data: {
       type: "array",
       contains: {
-        type: "ItemPublic",
+        type: "PollPublic",
       },
       isRequired: true,
     },

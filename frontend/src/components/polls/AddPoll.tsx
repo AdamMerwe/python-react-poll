@@ -15,15 +15,15 @@ import {
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { type SubmitHandler, useForm } from "react-hook-form"
 
-import { type ApiError, type ItemCreate, ItemsService } from "../../client"
+import { type ApiError, type PollCreate, PollsService } from "../../client"
 import useCustomToast from "../../hooks/useCustomToast"
 
-interface AddItemProps {
+interface AddPollProps {
   isOpen: boolean
   onClose: () => void
 }
 
-const AddItem = ({ isOpen, onClose }: AddItemProps) => {
+const AddPoll = ({ isOpen, onClose }: AddPollProps) => {
   const queryClient = useQueryClient()
   const showToast = useCustomToast()
   const {
@@ -31,7 +31,7 @@ const AddItem = ({ isOpen, onClose }: AddItemProps) => {
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<ItemCreate>({
+  } = useForm<PollCreate>({
     mode: "onBlur",
     criteriaMode: "all",
     defaultValues: {
@@ -41,10 +41,10 @@ const AddItem = ({ isOpen, onClose }: AddItemProps) => {
   })
 
   const mutation = useMutation({
-    mutationFn: (data: ItemCreate) =>
-      ItemsService.createItem({ requestBody: data }),
+    mutationFn: (data: PollCreate) =>
+      PollsService.createPoll({ requestBody: data }),
     onSuccess: () => {
-      showToast("Success!", "Item created successfully.", "success")
+      showToast("Success!", "Poll created successfully.", "success")
       reset()
       onClose()
     },
@@ -53,11 +53,11 @@ const AddItem = ({ isOpen, onClose }: AddItemProps) => {
       showToast("Something went wrong.", `${errDetail}`, "error")
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["items"] })
+      queryClient.invalidateQueries({ queryKey: ["polls"] })
     },
   })
 
-  const onSubmit: SubmitHandler<ItemCreate> = (data) => {
+  const onSubmit: SubmitHandler<PollCreate> = (data) => {
     mutation.mutate(data)
   }
 
@@ -71,7 +71,7 @@ const AddItem = ({ isOpen, onClose }: AddItemProps) => {
       >
         <ModalOverlay />
         <ModalContent as="form" onSubmit={handleSubmit(onSubmit)}>
-          <ModalHeader>Add Item</ModalHeader>
+          <ModalHeader>Add Poll</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
             <FormControl isRequired isInvalid={!!errors.title}>
@@ -111,4 +111,4 @@ const AddItem = ({ isOpen, onClose }: AddItemProps) => {
   )
 }
 
-export default AddItem
+export default AddPoll
