@@ -11,25 +11,25 @@ export type HTTPValidationError = {
   detail?: Array<ValidationError>
 }
 
-export type ItemCreate = {
+export type PollCreate = {
   title: string
   description?: string | null
 }
 
-export type ItemPublic = {
+export type PollPublic = {
   title: string
   description?: string | null
   id: number
   owner_id: number
 }
 
-export type ItemUpdate = {
+export type PollUpdate = {
   title?: string | null
   description?: string | null
 }
 
-export type ItemsPublic = {
-  data: Array<ItemPublic>
+export type PollsPublic = {
+  data: Array<PollPublic>
   count: number
 }
 

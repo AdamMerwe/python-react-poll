@@ -14,10 +14,10 @@ import type {
   UsersPublic,
   UserUpdate,
   UserUpdateMe,
-  ItemCreate,
-  ItemPublic,
-  ItemsPublic,
-  ItemUpdate,
+  PollCreate,
+  PollPublic,
+  PollsPublic,
+  PollUpdate,
 } from "./models"
 
 export type TDataLoginAccessToken = {
@@ -388,38 +388,38 @@ export class UtilsService {
   }
 }
 
-export type TDataReadItems = {
+export type TDataReadPolls = {
   limit?: number
   skip?: number
 }
-export type TDataCreateItem = {
-  requestBody: ItemCreate
+export type TDataCreatePoll = {
+  requestBody: PollCreate
 }
-export type TDataReadItem = {
+export type TDataReadPoll = {
   id: number
 }
-export type TDataUpdateItem = {
+export type TDataUpdatePoll = {
   id: number
-  requestBody: ItemUpdate
+  requestBody: PollUpdate
 }
-export type TDataDeleteItem = {
+export type TDataDeletePoll = {
   id: number
 }
 
-export class ItemsService {
+export class PollsService {
   /**
-   * Read Items
-   * Retrieve items.
-   * @returns ItemsPublic Successful Response
+   * Read Polls
+   * Retrieve polls.
+   * @returns PollssPublic Successful Response
    * @throws ApiError
    */
-  public static readItems(
-    data: TDataReadItems = {},
-  ): CancelablePromise<ItemsPublic> {
+  public static readPolls(
+    data: TDataReadPolls = {},
+  ): CancelablePromise<PollsPublic> {
     const { limit = 100, skip = 0 } = data
     return __request(OpenAPI, {
       method: "GET",
-      url: "/api/v1/items/",
+      url: "/api/v1/polls/",
       query: {
         skip,
         limit,
@@ -431,18 +431,18 @@ export class ItemsService {
   }
 
   /**
-   * Create Item
-   * Create new item.
-   * @returns ItemPublic Successful Response
+   * Create Poll
+   * Create new poll.
+   * @returns PollPublic Successful Response
    * @throws ApiError
    */
-  public static createItem(
-    data: TDataCreateItem,
-  ): CancelablePromise<ItemPublic> {
+  public static createPoll(
+    data: TDataCreatePoll,
+  ): CancelablePromise<PollPublic> {
     const { requestBody } = data
     return __request(OpenAPI, {
       method: "POST",
-      url: "/api/v1/items/",
+      url: "/api/v1/polls/",
       body: requestBody,
       mediaType: "application/json",
       errors: {
@@ -452,16 +452,16 @@ export class ItemsService {
   }
 
   /**
-   * Read Item
-   * Get item by ID.
-   * @returns ItemPublic Successful Response
+   * Read Poll
+   * Get poll by ID.
+   * @returns PollPublic Successful Response
    * @throws ApiError
    */
-  public static readItem(data: TDataReadItem): CancelablePromise<ItemPublic> {
+  public static readPoll(data: TDataReadPoll): CancelablePromise<PollPublic> {
     const { id } = data
     return __request(OpenAPI, {
       method: "GET",
-      url: "/api/v1/items/{id}",
+      url: "/api/v1/polls/{id}",
       path: {
         id,
       },
@@ -472,18 +472,18 @@ export class ItemsService {
   }
 
   /**
-   * Update Item
-   * Update an item.
-   * @returns ItemPublic Successful Response
+   * Update Poll
+   * Update an poll.
+   * @returns PollPublic Successful Response
    * @throws ApiError
    */
-  public static updateItem(
-    data: TDataUpdateItem,
-  ): CancelablePromise<ItemPublic> {
+  public static updatePoll(
+    data: TDataUpdatePoll,
+  ): CancelablePromise<PollPublic> {
     const { id, requestBody } = data
     return __request(OpenAPI, {
       method: "PUT",
-      url: "/api/v1/items/{id}",
+      url: "/api/v1/polls/{id}",
       path: {
         id,
       },
@@ -496,16 +496,16 @@ export class ItemsService {
   }
 
   /**
-   * Delete Item
-   * Delete an item.
+   * Delete Poll
+   * Delete a poll.
    * @returns Message Successful Response
    * @throws ApiError
    */
-  public static deleteItem(data: TDataDeleteItem): CancelablePromise<Message> {
+  public static deletePoll(data: TDataDeletePoll): CancelablePromise<Message> {
     const { id } = data
     return __request(OpenAPI, {
       method: "DELETE",
-      url: "/api/v1/items/{id}",
+      url: "/api/v1/polls/{id}",
       path: {
         id,
       },

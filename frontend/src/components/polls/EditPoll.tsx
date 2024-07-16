@@ -17,19 +17,19 @@ import { type SubmitHandler, useForm } from "react-hook-form"
 
 import {
   type ApiError,
-  type ItemPublic,
-  type ItemUpdate,
-  ItemsService,
+  type PollPublic,
+  type PollUpdate,
+  PollsService,
 } from "../../client"
 import useCustomToast from "../../hooks/useCustomToast"
 
-interface EditItemProps {
-  item: ItemPublic
+interface EditPollProps {
+  poll: PollPublic
   isOpen: boolean
   onClose: () => void
 }
 
-const EditItem = ({ item, isOpen, onClose }: EditItemProps) => {
+const EditPoll = ({ poll, isOpen, onClose }: EditPollProps) => {
   const queryClient = useQueryClient()
   const showToast = useCustomToast()
   const {
@@ -37,17 +37,17 @@ const EditItem = ({ item, isOpen, onClose }: EditItemProps) => {
     handleSubmit,
     reset,
     formState: { isSubmitting, errors, isDirty },
-  } = useForm<ItemUpdate>({
+  } = useForm<PollUpdate>({
     mode: "onBlur",
     criteriaMode: "all",
-    defaultValues: item,
+    defaultValues: poll,
   })
 
   const mutation = useMutation({
-    mutationFn: (data: ItemUpdate) =>
-      ItemsService.updateItem({ id: item.id, requestBody: data }),
+    mutationFn: (data: PollUpdate) =>
+      PollsService.updatePoll({ id: poll.id, requestBody: data }),
     onSuccess: () => {
-      showToast("Success!", "Item updated successfully.", "success")
+      showToast("Success!", "Poll updated successfully.", "success")
       onClose()
     },
     onError: (err: ApiError) => {
@@ -55,11 +55,11 @@ const EditItem = ({ item, isOpen, onClose }: EditItemProps) => {
       showToast("Something went wrong.", `${errDetail}`, "error")
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["items"] })
+      queryClient.invalidateQueries({ queryKey: ["polls"] })
     },
   })
 
-  const onSubmit: SubmitHandler<ItemUpdate> = async (data) => {
+  const onSubmit: SubmitHandler<PollUpdate> = async (data) => {
     mutation.mutate(data)
   }
 
@@ -78,7 +78,7 @@ const EditItem = ({ item, isOpen, onClose }: EditItemProps) => {
       >
         <ModalOverlay />
         <ModalContent as="form" onSubmit={handleSubmit(onSubmit)}>
-          <ModalHeader>Edit Item</ModalHeader>
+          <ModalHeader>Edit Poll</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
             <FormControl isInvalid={!!errors.title}>
@@ -121,4 +121,4 @@ const EditItem = ({ item, isOpen, onClose }: EditItemProps) => {
   )
 }
 
-export default EditItem
+export default EditPoll

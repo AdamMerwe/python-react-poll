@@ -41,7 +41,7 @@ class UpdatePassword(SQLModel):
 class User(UserBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
     hashed_password: str
-    items: list["Item"] = Relationship(back_populates="owner")
+    polls: list["Poll"] = Relationship(back_populates="owner")
 
 
 # Properties to return via API, id is always required
@@ -55,39 +55,55 @@ class UsersPublic(SQLModel):
 
 
 # Shared properties
-class ItemBase(SQLModel):
+class PollBase(SQLModel):
     title: str = Field(min_length=1, max_length=255)
     description: str | None = Field(default=None, max_length=255)
 
 
-# Properties to receive on item creation
-class ItemCreate(ItemBase):
+# Properties to receive on poll creation
+class PollCreate(PollBase):
     title: str = Field(min_length=1, max_length=255)
+    options: list["PollOption"] = Relationship(back_populates="poll")
 
 
-# Properties to receive on item update
-class ItemUpdate(ItemBase):
+# Properties to receive on poll update
+class PollUpdate(PollBase):
     title: str | None = Field(default=None, min_length=1, max_length=255)  # type: ignore
 
 
 # Database model, database table inferred from class name
-class Item(ItemBase, table=True):
+class Poll(PollBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
     title: str = Field(max_length=255)
     owner_id: int | None = Field(default=None, foreign_key="user.id", nullable=False)
-    owner: User | None = Relationship(back_populates="items")
+    owner: User | None = Relationship(back_populates="polls")
+    options: list["PollOption"] = Relationship(back_populates="poll")
 
 
 # Properties to return via API, id is always required
-class ItemPublic(ItemBase):
+class PollPublic(PollBase):
     id: int
     owner_id: int
 
 
-class ItemsPublic(SQLModel):
-    data: list[ItemPublic]
+class PollPublic(SQLModel):
+    data: list[PollPublic]
     count: int
 
+
+class PollOption(SQLModel):
+    id: int | None = Field(default=None, primary_key=True)
+    description: str = Field(max_length=255)
+    poll_id: int | None = Field(default=None, foreign_key="poll.id", nullable=False)
+    poll: Poll | None = Relationship(back_populates="pollOption")
+
+
+class PollVote(SQLModel):
+    id: int | None = Field(default=None, primary_key=True)
+    pollOption_id: int | None = Field(default=None, foreign_key="pollOption.id", nullable=False)
+    pollOption: PollOption | None = Relationship(back_populates="pollVote")
+    owner_id: int | None = Field(default=None, foreign_key="user.id", nullable=False)
+    owner: User | None = Relationship(back_populates="pollVotes")
 
 # Generic message
 class Message(SQLModel):
